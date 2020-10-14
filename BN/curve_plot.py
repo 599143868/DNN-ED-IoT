@@ -2,8 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import random
 
-#数据读取
-#batch_size部分
+
 curve_with_BN = np.loadtxt('curve_with_BN.txt')
 curve_without_BN = np.loadtxt('curve_without_BN.txt')
 
@@ -32,7 +31,7 @@ for i in range(len(curve_without_BN)):
 print(curve_without_BN_least[-1])
 
 
-#画图
+
 plt.figure(1)
 plt.plot(range(len(curve_with_BN)),curve_with_BN,'steelblue',label='with Batch Normalization',linestyle='-')
 plt.plot(range(len(curve_without_BN)),curve_without_BN,'orange',label='without Batch Normalization',linestyle='-')
@@ -54,5 +53,4 @@ plt.ylim([10**-4,10**5])
 plt.text(270000,0.0004,'(270545,0.001)',ha='center',)
 plt.text(len(curve_without_BN),0.85,'(1000000,0.335)',ha='center',)
 plt.legend()
-# plt.savefig('E:/coding/test-powergrid_no1vector画超参数/分布式batchsize曲线_第一个向量.png',dpi=600)
 plt.show()
