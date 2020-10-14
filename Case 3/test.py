@@ -8,29 +8,29 @@ from mpl_toolkits.mplot3d import Axes3D
 import time
 
 
-#参数设置
-model_path = 'C:/Users/Administrator.JACL4WGNSVYXUQ6/Desktop/Fourth Paper/材料/代码/dynamic units status/model_saved/'
-data_path = 'C:/Users/Administrator.JACL4WGNSVYXUQ6/Desktop/Fourth Paper/材料/代码/dynamic units status/Dataset/Dataset.mat'
+
+model_path = 'yourpath/model_saved/'
+data_path = 'yourpath/Dataset/Dataset.mat'
 input_length = 2
-target_length = 6      #分解出的系数的个数
+target_length = 6      
 lr = 1e-3
 Alpha = [0.00375,0.0175,0.0625,0.00834,0.025,0.025]
 Beta = [2,1.75,1.0,3.25,3.0,3.0]
-#数据读取与预处理
+
 data = scipy.io.loadmat(data_path)
 data = tf.cast(data['Dataset'],dtype=tf.float32)
 with tf.Session() as sess:
     data = data.eval()
-# np.random.shuffle(data)
+
 data_input,data_target = np.split(data,[2,],axis=1)
 ss = StandardScaler()
 std_data_input = ss.fit_transform(data_input)
 
-#占位定义
+
 x = tf.placeholder(tf.float32,[None,input_length])
 y = tf.placeholder(tf.float32,[None,target_length])
 is_train = tf.placeholder_with_default(False,(),'is_train')
-#隐藏层定义
+
 w1 = tf.Variable(tf.truncated_normal(shape=(input_length,200),stddev=0.1))
 b1 = tf.Variable(tf.truncated_normal(shape=(1,200),stddev=0.1))
 w2 = tf.Variable(tf.truncated_normal(shape=(200,200),stddev=0.1))
@@ -73,7 +73,7 @@ train_op = tf.train.AdamOptimizer(lr).minimize(mse)
 train_op = tf.group([train_op, update_ops])
 mse_train_best = 5000000
 
-#开始测试
+
 saver = tf.train.Saver()
 with tf.Session() as sess:
 
@@ -106,13 +106,13 @@ with tf.Session() as sess:
     ax.set_zlabel(r'Total Cost (DNN)',fontdict={'size':15})
     ax.view_init(elev=20,azim=169)
     fig.subplots_adjust(right=0.8)
-    # colorbar 左 下 宽 高
+
     l = 0.76
     b = 0.20
     w = 0.015
     h = 0.48
 
-    # 对应 l,b,w,h；设置colorbar位置；
+  
     rect = [l, b, w, h]
     cbar_ax = fig.add_axes(rect)
 
@@ -140,16 +140,13 @@ with tf.Session() as sess:
     ax.set_zlabel(r'$P_3$',fontdict={'size':15})
     ax.view_init(elev=20,azim=169)
     fig.subplots_adjust(right=0.8)
-    # colorbar 左 下 宽 高      l = 0.82
-    #     b = 0.15
-    #     w = 0.015
-    #     h = 0.65
+
     l = 0.75
     b = 0.20
     w = 0.015
     h = 0.48
 
-    # 对应 l,b,w,h；设置colorbar位置；
+
     rect = [l, b, w, h]
     cbar_ax = fig.add_axes(rect)
 
