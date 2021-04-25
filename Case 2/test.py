@@ -8,13 +8,13 @@ from mpl_toolkits.mplot3d import Axes3D
 import time
 
 
-#参数设置
+
 model_path = 'yourpath/model_saved/'
 data_path = 'yourpath/Dataset/Dataset.mat'
 input_length = 1
-target_length = 6      #分解出的系数的个数
+target_length = 6      
 lr = 1e-3
-#数据读取与预处理
+
 data = scipy.io.loadmat(data_path)
 data = tf.cast(data['Dataset'],dtype=tf.float32)
 with tf.Session() as sess:
@@ -26,11 +26,11 @@ std_data_input = ss.fit_transform(data_input)
 
 
 
-#占位定义
+
 x = tf.placeholder(tf.float32,[None,input_length])
 y = tf.placeholder(tf.float32,[None,target_length])
 is_train = tf.placeholder_with_default(False,(),'is_train')
-#隐藏层定义
+
 w1 = tf.Variable(tf.truncated_normal(shape=(input_length,200),stddev=0.1))
 b1 = tf.Variable(tf.truncated_normal(shape=(1,200),stddev=0.1))
 w2 = tf.Variable(tf.truncated_normal(shape=(200,200),stddev=0.1))
@@ -42,7 +42,7 @@ b4 = tf.Variable(tf.truncated_normal(shape=(1,target_length),stddev=0.1))
 
 
 
-#神经网络定义
+
 hidden1 = tf.nn.relu(tf.layers.batch_normalization(tf.add(tf.matmul(x,w1),b1),training=is_train))
 hidden2 = tf.nn.relu(tf.layers.batch_normalization(tf.add(tf.matmul(hidden1,w2),b2),training=is_train))
 hidden3 = tf.nn.relu(tf.layers.batch_normalization(tf.add(tf.matmul(hidden2,w3),b3),training=is_train))
@@ -53,7 +53,7 @@ update_ops = tf.get_collection(tf.GraphKeys.UPDATE_OPS)
 train_op = tf.train.AdamOptimizer(lr).minimize(mse)
 train_op = tf.group([train_op, update_ops])
 
-#开始测试
+
 saver = tf.train.Saver()
 with tf.Session() as sess:
     # sess.run(tf.global_variables_initializer())
